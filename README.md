@@ -167,6 +167,37 @@ If you have an HDD, fragmentation is a major reason for slow app starts.
 - For SSD: Click **Optimize** (Trim).
 - For HDD: Click **Analyze** and then **Optimize**.
 
+  # 💻 Windows System Support & Troubleshooting
+
+This document covers common OS-level issues and hardware-related troubleshooting steps.
+
+---
+
+##  Blue Screen of Death (BSOD) Troubleshooting
+**Scenario:** The system crashes with a blue error screen.
+1. Restart the PC and boot into **Safe Mode**.
+2. Run Command Prompt as Admin and type: `sfc /scannow`.
+3. Check **Event Viewer** (Windows Logs > System) for critical errors.
+4. Update or Rollback **Display/Network Drivers** in Device Manager.
+
+
+##  BitLocker Recovery Issues
+**Scenario:** User is locked out and the system asks for a 48-digit Recovery Key.
+1. Log in to the **Microsoft Azure Portal** (://azure.com).
+2. Search for the **Device Name**.
+3. Retrieve the **BitLocker Recovery Key** and provide it to the user.
+4. *Note: Advise users to never store the key on the same device.*
+
+##  Printer Spooler Service Fix
+**Scenario:** Documents are stuck in the print queue or printer shows "Offline".
+1. Press `Win + R`, type `services.msc`, and hit Enter.
+2. Find **Print Spooler**, right-click it, and select **Restart**.
+3. If it fails, clear the spooler cache:
+   - Stop Print Spooler.
+   - Delete files in `C:\Windows\System32\spool\PRINTERS`.
+   - Start Print Spooler again.
+
+
 ---
 
 
