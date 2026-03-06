@@ -68,7 +68,7 @@ When you encounter specific Blue Screen error codes, follow these professional t
 ---
 
 ### 1️⃣ Error: 0x0000000A (Driver or Software Conflict)
-**Scenario:** Occurs when a driver uses an incorrect memory address.
+**Issue:** Occurs when a driver uses an incorrect memory address.
 1. **Boot into Safe Mode:** Restart and hold `Shift` while clicking **Restart** > Troubleshoot > Advanced options > Startup Settings > Restart > Press **4**.
 2. **Open Device Manager:** Press `Win + X` and select **Device Manager**.
 3. **Identify Driver:** Look for any device with a yellow exclamation mark (⚠️).
@@ -76,7 +76,7 @@ When you encounter specific Blue Screen error codes, follow these professional t
 5. **Clean Boot:** If the error persists, run `msconfig`, hide all Microsoft services, and disable all startup items to find the faulty software.
 
 ### 2️⃣ Error: 0x0000007B (Inaccessible Boot Device)
-**Scenario:** Windows cannot communicate with the Hard Drive/SSD during startup.
+**Issue:** Windows cannot communicate with the Hard Drive/SSD during startup.
 1. **Enter BIOS/UEFI:** Restart and tap `F2`, `F12`, or `Del` repeatedly.
 2. **Locate SATA Mode:** Go to **Storage/Advanced** settings and find **SATA Configuration**.
 3. **Switch Mode:** If it is set to **IDE**, change it to **AHCI**. If it is **AHCI**, try **RAID** or **IDE**.
@@ -84,33 +84,77 @@ When you encounter specific Blue Screen error codes, follow these professional t
 5. **Command Prompt:** If it still fails, boot from a Windows USB, open **Command Prompt**, and run `bootrec /fixmbr` and `bootrec /fixboot`.
 
 ### 3️⃣ Error: 0x000000ED (Unmountable Boot Volume)
-**Scenario:** The file system on the boot drive is corrupted.
+**Issue:** The file system on the boot drive is corrupted.
 1. **Automatic Repair:** Allow Windows to enter the **Automatic Repair** screen after 2-3 failed boots.
 2. **Advanced Options:** Navigate to **Troubleshoot** > **Advanced Options** > **Command Prompt**.
 3. **Run Repair:** Type `chkdsk c: /f` and press **Enter**. (Note: Change `c:` if your OS is on a different drive).
 4. **Restart:** Once the scan reaches 100%, type `exit` and click **Continue to Windows**.
 
 ### 4️⃣ Error: 0x00000024 (NTFS File System Error)
-**Scenario:** Severe corruption within the NTFS disk partition.
+**Issue:** Severe corruption within the NTFS disk partition.
 1. **Admin CMD:** Search for **CMD**, right-click, and select **Run as Administrator**.
 2. **Deep Scan:** Type `chkdsk c: /r` and press **Enter**.
 3. **Schedule Scan:** Type `Y` when asked to schedule the scan for the next restart.
 4. **Execute:** Restart the PC. Windows will perform a 5-stage repair. **Do not turn off the power** during this process (it may take 1-2 hours).
 
 ### 5️⃣ Error: PAGE_FAULT_IN_NONPAGED_AREA
-**Scenario:** Data requested is not found in memory (Faulty RAM or Antivirus conflict).
+**Issue:** Data requested is not found in memory (Faulty RAM or Antivirus conflict).
 1. **Memory Diagnostic:** Press `Win + R`, type `mdsched.exe`, and select **Restart now and check for problems**.
 2. **Observe Results:** The PC will restart and test your RAM. If it finds errors, the RAM stick may need replacement.
-3. **Check Virtual Memory:** Go to **System Properties** > **Advanced** > **Settings (Performance)** > **Advanced** > **Change**. Ensure **"Automatically manage paging file size"** is checked.
+3. **Check Virtual Memory:** Go to **System Properties** > **Advanced** > **Settings (Performance)** > **Advanced** > **Change**. Ensure **"Automatically manage paging          file size"** is checked.
 4. **Disable Antivirus:** If the error occurs after installing an Antivirus, uninstall it in **Safe Mode** to check for compatibility.
 -----
-##  BitLocker Recovery Issues
-**Scenario:** User is locked out and the system asks for a 48-digit Recovery Key.
-1. Log in to the **Microsoft Azure Portal** (://azure.com).
-2. Search for the **Device Name**.
-3. Retrieve the **BitLocker Recovery Key** and provide it to the user.
-4. *Note: Advise users to never store the key on the same device.*
+# 🔐 BitLocker Drive Encryption Troubleshooting
 
+This guide explains how to handle BitLocker recovery prompts and encryption errors in a corporate environment.
+
+---
+
+## 🛠️ Common Scenarios & Solutions
+
+### 1. BitLocker Recovery Key Prompt (Blue Screen)
+**Issue:** After a BIOS update or hardware change, the PC asks for a 48-digit recovery key.
+1. **Locate the Key:** 
+   - **Personal Account:** Check [://microsoft.com](https://microsoft.com).
+   - **Office/Work Account:** Log in to **Azure AD Portal** (://azure.com) > Devices > All Devices > Search for Device Name > View BitLocker Keys.
+   - **Active Directory:** Open **AD Users and Computers**, right-click the Computer object, and check the **BitLocker Recovery** tab.
+2. **Enter the Key:** Carefully type the 48-digit numerical key into the recovery screen.
+3. **Resume Protection:** Once logged in, open **CMD (Admin)** and run: `manage-bde -protectors -enable C:`
+
+### 2. "BitLocker encryption is waiting for activation"
+**Issue:** The drive shows a yellow exclamation mark ⚠️ in File Explorer.
+1. Open **Control Panel** > **BitLocker Drive Encryption**.
+2. Click **Turn on BitLocker**.
+3. Save the recovery key to your cloud account or a secure USB.
+4. Let the encryption process reach 100%.
+
+### 3. TPM (Trusted Platform Module) Issues
+**Issue:** BitLocker cannot be enabled because the "TPM is missing or not initialized."
+1. Restart the PC and enter the **BIOS/UEFI**.
+2. Look for **Security** > **TPM State** or **PTT (Intel)** / **fTPM (AMD)**.
+3. Set it to **Enabled** or **Active**.
+4. In Windows, run `tpm.msc` to verify the status.
+
+### 4. Suspend BitLocker for Maintenance
+**Issue:** You need to update BIOS or change Hardware without triggering a recovery prompt.
+1. Open **PowerShell (Admin)**.
+2. Run: `Suspend-BitLocker -MountPoint "C:" -RebootCount 1`
+3. Perform the update. BitLocker will automatically resume after one restart.
+
+---
+
+## 💻 Useful BitLocker Commands (CMD Admin)
+
+| Command | Purpose |
+| :--- | :--- |
+| `manage-bde -status` | Checks encryption percentage and protection status. |
+| `manage-bde -unlock C: -rp [Key]` | Unlocks a drive using the recovery password via CMD. |
+| `manage-bde -off C:` | Fully decrypts and turns off BitLocker. |
+| `manage-bde -protectors -get C:` | Displays the Recovery Key ID (to find the key in AD/Azure). |
+
+---
+
+> **Warning:** Never delete a computer object from Azure AD or local AD without backing up its BitLocker recovery key first!
 
 # 💻 Windows System Support & Troubleshooting
 
