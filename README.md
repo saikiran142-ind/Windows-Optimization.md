@@ -4,10 +4,106 @@
 
 This guide outlines the standard procedures for optimizing Windows 10/11 for better performance and resolving system lag issues.
 
-  # 💻 Windows System Support & Troubleshooting
+# 🟦 Windows Blue Screen of Death (BSOD) Troubleshooting Guide
 
-This document covers common OS-level issues and hardware-related troubleshooting steps.
+When a system crashes with a Blue Screen, follow these professional troubleshooting steps to identify and fix the root cause.
 
+---
+
+### 1. 🔍 Identify the Error Code
+Every BSOD has a **Stop Code** (e.g., `CRITICAL_PROCESS_DIED`, `MEMORY_MANAGEMENT`, `IRQL_NOT_LESS_OR_EQUAL`). 
+- Take a photo of the screen or check **Event Viewer** (Windows Logs > System) after restart.
+
+### 2. 🛠️ Step-by-Step Resolution
+
+#### **Step 1: Boot into Safe Mode**
+If the PC is stuck in a boot loop:
+- Restart and interrupt the boot process 3 times to enter **Automatic Repair**.
+- Go to **Troubleshoot > Advanced options > Startup Settings > Restart**.
+- Press **4** or **F4** to start in **Safe Mode**.
+
+#### **Step 2: Run System File Checker (SFC)**
+Corrupted system files are a common cause of BSOD.
+- Open **CMD as Administrator**.
+- Type: `sfc /scannow` and press Enter.
+
+#### **Step 3: Run Check Disk (CHKDSK)**
+If the BSOD is caused by Hard Drive/SSD errors:
+- In CMD (Admin), type: `chkdsk c: /f /r`
+- Type `Y` and restart the PC to let it scan.
+
+#### **Step 4: Memory Diagnostic Tool**
+To check if your RAM is faulty:
+- Press `Win + R`, type `mdsched.exe`, and press Enter.
+- Select **"Restart now and check for problems"**.
+
+#### **Step 5: Driver Rollback or Update**
+BSOD often happens after a faulty driver update (especially Display or Network drivers).
+- Open **Device Manager**.
+- Right-click the suspected driver > **Properties > Driver > Roll Back Driver**.
+- If no rollback is available, select **Update Driver**.
+
+#### **Step 6: Uninstall Recent Updates**
+If the BSOD started after a Windows Update:
+- Go to **Settings > Update & Security > View update history > Uninstall updates**.
+- Select the most recent update and click **Uninstall**.
+
+---
+
+### 📊 Common BSOD Error Codes & Fixes
+
+
+| Error Code | Common Cause | Quick Fix |
+| :--- | :--- | :--- |
+| **0x0000000A** | Faulty Driver/Incompatible Software | Update Drivers in Safe Mode |
+| **0x0000007B** | Hard Drive Controller Issues | Check SATA Mode in BIOS (AHCI/IDE) |
+| **0x000000ED** | Corrupted File System | Run `chkdsk /f` |
+| **0x00000024** | NTFS Partition Corruption | Run `chkdsk /r` |
+| **PAGE_FAULT_IN_NONPAGED_AREA** | Faulty RAM or Antivirus Conflict | Run Memory Diagnostic / Disable AV |
+
+# 🟦 Detailed Step-by-Step Fixes for BSOD Errors
+
+When you encounter specific Blue Screen error codes, follow these professional troubleshooting procedures.
+
+---
+
+### 1️⃣ Error: 0x0000000A (Driver or Software Conflict)
+**Scenario:** Occurs when a driver uses an incorrect memory address.
+1. **Boot into Safe Mode:** Restart and hold `Shift` while clicking **Restart** > Troubleshoot > Advanced options > Startup Settings > Restart > Press **4**.
+2. **Open Device Manager:** Press `Win + X` and select **Device Manager**.
+3. **Identify Driver:** Look for any device with a yellow exclamation mark (⚠️).
+4. **Update/Uninstall:** Right-click the suspect driver and select **Update Driver** or **Uninstall device**.
+5. **Clean Boot:** If the error persists, run `msconfig`, hide all Microsoft services, and disable all startup items to find the faulty software.
+
+### 2️⃣ Error: 0x0000007B (Inaccessible Boot Device)
+**Scenario:** Windows cannot communicate with the Hard Drive/SSD during startup.
+1. **Enter BIOS/UEFI:** Restart and tap `F2`, `F12`, or `Del` repeatedly.
+2. **Locate SATA Mode:** Go to **Storage/Advanced** settings and find **SATA Configuration**.
+3. **Switch Mode:** If it is set to **IDE**, change it to **AHCI**. If it is **AHCI**, try **RAID** or **IDE**.
+4. **Save and Exit:** Press `F10` to save and restart.
+5. **Command Prompt:** If it still fails, boot from a Windows USB, open **Command Prompt**, and run `bootrec /fixmbr` and `bootrec /fixboot`.
+
+### 3️⃣ Error: 0x000000ED (Unmountable Boot Volume)
+**Scenario:** The file system on the boot drive is corrupted.
+1. **Automatic Repair:** Allow Windows to enter the **Automatic Repair** screen after 2-3 failed boots.
+2. **Advanced Options:** Navigate to **Troubleshoot** > **Advanced Options** > **Command Prompt**.
+3. **Run Repair:** Type `chkdsk c: /f` and press **Enter**. (Note: Change `c:` if your OS is on a different drive).
+4. **Restart:** Once the scan reaches 100%, type `exit` and click **Continue to Windows**.
+
+### 4️⃣ Error: 0x00000024 (NTFS File System Error)
+**Scenario:** Severe corruption within the NTFS disk partition.
+1. **Admin CMD:** Search for **CMD**, right-click, and select **Run as Administrator**.
+2. **Deep Scan:** Type `chkdsk c: /r` and press **Enter**.
+3. **Schedule Scan:** Type `Y` when asked to schedule the scan for the next restart.
+4. **Execute:** Restart the PC. Windows will perform a 5-stage repair. **Do not turn off the power** during this process (it may take 1-2 hours).
+
+### 5️⃣ Error: PAGE_FAULT_IN_NONPAGED_AREA
+**Scenario:** Data requested is not found in memory (Faulty RAM or Antivirus conflict).
+1. **Memory Diagnostic:** Press `Win + R`, type `mdsched.exe`, and select **Restart now and check for problems**.
+2. **Observe Results:** The PC will restart and test your RAM. If it finds errors, the RAM stick may need replacement.
+3. **Check Virtual Memory:** Go to **System Properties** > **Advanced** > **Settings (Performance)** > **Advanced** > **Change**. Ensure **"Automatically manage paging file size"** is checked.
+4. **Disable Antivirus:** If the error occurs after installing an Antivirus, uninstall it in **Safe Mode** to check for compatibility.
+-----
 ##  BitLocker Recovery Issues
 **Scenario:** User is locked out and the system asks for a 48-digit Recovery Key.
 1. Log in to the **Microsoft Azure Portal** (://azure.com).
@@ -15,7 +111,10 @@ This document covers common OS-level issues and hardware-related troubleshooting
 3. Retrieve the **BitLocker Recovery Key** and provide it to the user.
 4. *Note: Advise users to never store the key on the same device.*
 
+
 # 💻 Windows System Support & Troubleshooting
+
+This document covers common OS-level issues and hardware-related troubleshooting steps.
 
 | # | Task | Emoji | Action / Benefit |
 | :--- | :--- | :--- | :--- |
