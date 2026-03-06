@@ -8,16 +8,6 @@ This guide outlines the standard procedures for optimizing Windows 10/11 for bet
 
 This document covers common OS-level issues and hardware-related troubleshooting steps.
 
----
-
-##  Blue Screen of Death (BSOD) Troubleshooting
-**Scenario:** The system crashes with a blue error screen.
-1. Restart the PC and boot into **Safe Mode**.
-2. Run Command Prompt as Admin and type: `sfc /scannow`.
-3. Check **Event Viewer** (Windows Logs > System) for critical errors.
-4. Update or Rollback **Display/Network Drivers** in Device Manager.
-
-
 ##  BitLocker Recovery Issues
 **Scenario:** User is locked out and the system asks for a 48-digit Recovery Key.
 1. Log in to the **Microsoft Azure Portal** (://azure.com).
@@ -25,6 +15,7 @@ This document covers common OS-level issues and hardware-related troubleshooting
 3. Retrieve the **BitLocker Recovery Key** and provide it to the user.
 4. *Note: Advise users to never store the key on the same device.*
 
+# 💻 Windows System Support & Troubleshooting
 
 | # | Task | Emoji | Action / Benefit |
 | :--- | :--- | :--- | :--- |
