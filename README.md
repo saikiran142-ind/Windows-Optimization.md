@@ -125,3 +125,48 @@ Follow these 20 steps to improve system performance and reduce lag on Windows 10
 - `chkdsk c: /f` : Fixes file system errors on the drive.
 - `ipconfig /flushdns` : Resolves network browsing lag.
 
+
+---
+
+## 🐢 Troubleshooting Slow App Launch Issues
+
+If applications are taking too long to open, follow these technical troubleshooting steps:
+
+### 1. 🚦 Check for Background Resource Hogging
+- Open **Task Manager** (Ctrl + Shift + Esc).
+- Sort by **CPU** and **Memory** columns.
+- Identify any process using more than 20-30% CPU while idle.
+- **Action:** Right-click and **End Task** for unnecessary third-party apps.
+
+### 2. ⚡ Clear Prefetch and Superfetch (SysMain)
+Windows uses these to "speed up" apps, but if the cache is corrupted, it slows them down.
+- Press `Win + R`, type `prefetch`, and delete all files.
+- Press `Win + R`, type `services.msc`, find **SysMain**, right-click and select **Restart**.
+
+### 3. 🧹 Clean Boot (To identify conflicts)
+Sometimes an antivirus or a third-party service slows down other apps.
+- Press `Win + R`, type `msconfig`.
+- Go to the **Services** tab > Check **"Hide all Microsoft services"** > Click **Disable all**.
+- Go to **Startup** tab > Open **Task Manager** > **Disable** all items.
+- Restart the PC and see if apps open faster.
+
+### 4. 🛠️ Repair System Image (DISM & SFC)
+Corrupted Windows files can slow down the execution of `.exe` files.
+- Open **CMD as Administrator**.
+- Run: `DISM /Online /Cleanup-Image /RestoreHealth`
+- After it finishes, run: `sfc /scannow`
+
+### 5. 🖥️ Enable Hardware-Accelerated GPU Scheduling
+This offloads some UI tasks to the GPU, making app windows pop up faster.
+- Go to **Settings > System > Display > Graphics Settings**.
+- Turn **On** "Hardware-accelerated GPU scheduling" and **Restart**.
+
+### 6. 💾 Check Disk Health & Fragmentation
+If you have an HDD, fragmentation is a major reason for slow app starts.
+- Search for **"Defragment and Optimize Drives"**.
+- For SSD: Click **Optimize** (Trim).
+- For HDD: Click **Analyze** and then **Optimize**.
+
+---
+
+
