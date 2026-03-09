@@ -331,6 +331,32 @@ If you have an HDD, fragmentation is a major reason for slow app starts.
    - Delete files in `C:\Windows\System32\spool\PRINTERS`.
    - Start Print Spooler again.
 
+# 🛠 How to Fix 100% Disk Usage in Windows 10/11
+
+If your Task Manager shows 100% Disk usage, the system becomes extremely slow. Follow these IT Support steps to fix it:
+
+### 1. Disable SysMain (Superfetch)
+- Press `Win + R`, type `services.msc`.
+- Find **SysMain**, right-click, and select **Stop**.
+- Set Startup type to **Disabled**.
+
+### 2. Disable Windows Search
+- In the same `services.msc`, find **Windows Search**.
+- Right-click and select **Stop**.
+- Set Startup type to **Disabled**.
+
+### 3. Run Check Disk (Command Prompt)
+Open CMD as Administrator and run:
+`chkdsk.exe /f /r`
+*(Type 'Y' and restart your PC to repair disk errors).*
+
+### 4. Reset Virtual Memory
+- Go to `sysdm.cpl` > Advanced > Performance Settings > Advanced > Change.
+- Uncheck "Automatically manage paging file size".
+- Select "Custom size" or "No paging file" to reset.
+
+---
+**Note:** If these steps don't work, consider upgrading from HDD to **SSD** for better performance.
 
 ---
 
